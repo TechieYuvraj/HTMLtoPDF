@@ -92,6 +92,17 @@ The node output will be the PDF file as binary. You can then use subsequent node
 }
 ```
 
+Tip for n8n “Using JSON” mode: that input must be valid JSON text. If you use expressions, wrap the whole object with an expression and stringify it, for example:
+
+```
+{{ JSON.stringify({
+	html: $json.html,
+	filename: 'invoice.pdf',
+	options: { 'page-size': 'A4', 'margin-top': '10mm', 'margin-right': '10mm', 'margin-bottom': '10mm', 'margin-left': '10mm' }
+}) }}
+```
+Alternatively, choose “Using Fields” and add body parameters (html, filename, options) so n8n builds the JSON for you.
+
 ## Security Notes
 
 - Consider adding a simple shared secret via a custom header and reject requests that don’t include it.
