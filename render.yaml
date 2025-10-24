@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: html-to-pdf
+    env: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: ENABLE_CORS
+        value: "true"
+      - key: CONTENT_DISPOSITION
+        value: attachment
+      - key: MAX_HTML_BYTES
+        value: "5242880" # 5 MB
