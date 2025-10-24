@@ -1,12 +1,17 @@
-# Python base image (Alpine to install wkhtmltopdf reliably)
-FROM python:3.11-alpine
+# Python base image (Debian Bullseye with apt)
+FROM python:3.11-bullseye
 
-# Install wkhtmltopdf and fonts on Alpine
-RUN apk add --no-cache \
-      wkhtmltopdf \
-      ttf-dejavu \
-      fontconfig \
-      ca-certificates
+# Avoid prompts from apt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install wkhtmltopdf and fonts
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       wkhtmltopdf \
+       fonts-dejavu-core \
+       fontconfig \
+       ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set workdir
 WORKDIR /app
