@@ -1,16 +1,12 @@
-# Python base image
-FROM python:3.11-slim
+# Python base image (Alpine to install wkhtmltopdf reliably)
+FROM python:3.11-alpine
 
-# Avoid prompts from apt
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install wkhtmltopdf and fonts
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       wkhtmltopdf \
-       fonts-dejavu-core \
-       ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+# Install wkhtmltopdf and fonts on Alpine
+RUN apk add --no-cache \
+      wkhtmltopdf \
+      ttf-dejavu \
+      fontconfig \
+      ca-certificates
 
 # Set workdir
 WORKDIR /app
@@ -27,7 +23,8 @@ COPY app ./app
 # Environment
 ENV PYTHONUNBUFFERED=1 \
     PORT=8000 \
-    FLASK_ENV=production
+    FLASK_ENV=production \
+    WKHTMLTOPDF_PATH=/usr/bin/wkhtmltopdf
 
 # Expose web port
 EXPOSE 8000
